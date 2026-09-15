@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-screen Question - Claude 101</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1e2a38;
+            --navy-deep: #141c26;
+            --cream-bg: #FFF4D6;
+            --ink: #1e2a38;
+            --muted: rgba(30, 42, 56, 0.48);
+            --line: rgba(30, 42, 56, 0.18);
+            --danger: #8c3b2e;
+            --success: #2d5a3d;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .form-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .session-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--navy);
+            font-family: var(--font-display);
+            margin-bottom: 0.5rem;
+        }
+
+        .session-subtitle {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .form-section-box {
+            background: var(--cream-bg);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .section-number {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            font-family: var(--font-display);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .section-number:first-child {
+            margin-top: 0;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .subsection {
+            margin-bottom: 1rem;
+        }
+
+        .subsection-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-list,
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0.75rem;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(30, 42, 56, 0.1);
+        }
+
+        .radio-item:hover,
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--muted);
+            transform: translateX(3px);
+        }
+
+        .radio-item input[type="radio"],
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 0.6rem;
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            accent-color: var(--navy);
+        }
+
+        .radio-item label,
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--ink);
+            margin: 0;
+            flex: 1;
+        }
+
+        .text-input {
+            display: block;
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.7rem;
+            border: 1px solid rgba(30, 42, 56, 0.15);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: var(--font-body);
+            transition: all 0.2s ease;
+            color: var(--ink);
+            background: white;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(30, 42, 56, 0.08);
+        }
+
+        .mood-meter {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .mood-btn {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(30, 42, 56, 0.15);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .mood-btn:hover {
+            background: rgba(30, 42, 56, 0.05);
+            border-color: var(--muted);
+            transform: scale(1.08);
+        }
+
+        .mood-btn.selected {
+            background: var(--navy);
+            border-color: var(--navy);
+            box-shadow: 0 4px 12px rgba(30, 42, 56, 0.2);
+            transform: scale(1.12);
+            color: white;
+        }
+
+        .scale-container {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .scale-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .scale-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(30, 42, 56, 0.15);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: var(--ink);
+        }
+
+        .scale-btn:hover {
+            background: rgba(30, 42, 56, 0.05);
+            border-color: var(--muted);
+        }
+
+        .scale-btn.selected {
+            background: var(--navy);
+            border-color: var(--navy);
+            color: white;
+            box-shadow: 0 2px 8px rgba(30, 42, 56, 0.2);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid rgba(30, 42, 56, 0.15);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            color: var(--ink);
+            resize: vertical;
+            min-height: 80px;
+            margin-top: 0.5rem;
+            background: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(30, 42, 56, 0.08);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(30, 42, 56, 0.1);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(30, 42, 56, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--ink);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-family: var(--font-body);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: white;
+            border-color: var(--muted);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            border-color: var(--navy);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--navy-deep);
+            border-color: var(--navy-deep);
+            box-shadow: 0 4px 12px rgba(30, 42, 56, 0.3);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 11px;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: rgba(45, 90, 61, 0.08);
+            border: 1px solid rgba(45, 90, 61, 0.2);
+            color: var(--success);
+        }
+
+        .status-message.error {
+            background: rgba(140, 59, 46, 0.08);
+            border: 1px solid rgba(140, 59, 46, 0.2);
+            color: var(--danger);
+        }
+
+        .status-message.loading {
+            background: rgba(30, 42, 56, 0.05);
+            border: 1px solid rgba(30, 42, 56, 0.15);
+            color: var(--navy);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(30, 42, 56, 0.2);
+            border-top-color: var(--navy);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-wrapper">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <img src="logo.png" alt="Managing & Developing People" style="max-width: 300px; width: 100%; height: auto;">
+        </div>
+        
+        <div class="header-section">
+            <h1 class="session-title">Pre-screen Session : Claude 101 </h1>
+            <p class="session-subtitle">
+                <strong>Claude 101 Training :ร่วมทำ pre-screen เพื่อให้เราสามารถเตรียมการเรียนให้เหมาะสมกับความต้องการของคุณ</strong>
+            </p>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <div class="form-section-box">
+            <form id="preScreenForm">
+                <!-- Section 1 - Batch -->
+                <div class="subsection">
+                    <div class="section-number">1. รุ่นที่เรียน <span class="required">*</span></div>
+                    <div class="radio-list">
+                        <div class="radio-item">
+                            <input type="radio" name="batch" value="batch2" id="b1" required>
+                            <label for="b1">รุ่นที่ 2 : 6 Oct 2026</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="batch" value="batch3" id="b2">
+                            <label for="b2">รุ่นที่ 3 : 27 Oct 2026</label>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-batch">กรุณาเลือกรุ่น</div>
+                </div>
+
+                <!-- Section 2 - Department -->
+                <div class="subsection">
+                    <div class="section-number">2. แผนก <span class="required">*</span></div>
+                    <div class="checkbox-list">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="dept" value="tr_sv" id="d1">
+                            <label for="d1">TR&SV</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="dept" value="ppl_mpl" id="d2">
+                            <label for="d2">PPL&MPL</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="dept" value="wh" id="d3">
+                            <label for="d3">WH-1,2,3</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="dept" value="others" id="d4">
+                            <label for="d4">PROC,HRM,Admin</label>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-dept">กรุณาเลือกแผนก</div>
+                </div>
+
+                <!-- Section 3 - Claude Experience -->
+                <div class="subsection">
+                    <div class="section-number">3. เคยใช้ Claude มาก่อนไหม? <span class="required">*</span></div>
+                    <div class="radio-list">
+                        <div class="radio-item">
+                            <input type="radio" name="claudeExp" value="yes" id="c1" required>
+                            <label for="c1">เคย</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="claudeExp" value="no" id="c2">
+                            <label for="c2">ไม่เคย</label>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-claude">กรุณาเลือก</div>
+                </div>
+
+                <!-- Section 4 - Other AI Tools -->
+                <div class="subsection">
+                    <div class="section-number">4. นอกจาก Claude เคยใช้ AI ตัวอื่นมาก่อนไหม?</div>
+                    <div class="checkbox-list">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="otherAI" value="gemini" id="a1">
+                            <label for="a1">Gemini</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="otherAI" value="chatgpt" id="a2">
+                            <label for="a2">Chat GPT</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="otherAI" value="copilot" id="a3">
+                            <label for="a3">Copilot</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="otherAI" value="others" id="a4">
+                            <label for="a4">Others (ระบุ)</label>
+                        </div>
+                    </div>
+                    <input type="text" id="otherAIText" class="text-input" placeholder="ระบุ AI ตัวอื่นๆ" style="display: none;">
+                </div>
+
+                <!-- Section 5 - Mood Meter -->
+                <div class="subsection">
+                    <div class="section-number">5. อยากให้ Claude ช่วยทำอะไร? <span class="required">*</span></div>
+                    
+                    <div style="margin-bottom: 0.75rem;">
+                        <div class="subsection-title">5.1 รายงาน - Dashboard</div>
+                        <div class="mood-meter" data-question="dashboard">
+                            <button type="button" class="mood-btn" data-value="1" title="ไม่สนใจ">😞</button>
+                            <button type="button" class="mood-btn" data-value="2" title="ค่อนข้างไม่สนใจ">😕</button>
+                            <button type="button" class="mood-btn" data-value="3" title="ปานกลาง">😐</button>
+                            <button type="button" class="mood-btn" data-value="4" title="สนใจ">🙂</button>
+                            <button type="button" class="mood-btn" data-value="5" title="สนใจมาก">😄</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 0.75rem;">
+                        <div class="subsection-title">5.2 ระบบ - App - System</div>
+                        <div class="mood-meter" data-question="app">
+                            <button type="button" class="mood-btn" data-value="1" title="ไม่สนใจ">😞</button>
+                            <button type="button" class="mood-btn" data-value="2" title="ค่อนข้างไม่สนใจ">😕</button>
+                            <button type="button" class="mood-btn" data-value="3" title="ปานกลาง">😐</button>
+                            <button type="button" class="mood-btn" data-value="4" title="สนใจ">🙂</button>
+                            <button type="button" class="mood-btn" data-value="5" title="สนใจมาก">😄</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 0.75rem;">
+                        <div class="subsection-title">5.3 Project</div>
+                        <div class="mood-meter" data-question="project">
+                            <button type="button" class="mood-btn" data-value="1" title="ไม่สนใจ">😞</button>
+                            <button type="button" class="mood-btn" data-value="2" title="ค่อนข้างไม่สนใจ">😕</button>
+                            <button type="button" class="mood-btn" data-value="3" title="ปานกลาง">😐</button>
+                            <button type="button" class="mood-btn" data-value="4" title="สนใจ">🙂</button>
+                            <button type="button" class="mood-btn" data-value="5" title="สนใจมาก">😄</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 0.75rem;">
+                        <div class="subsection-title">5.4 สรุปข้อมูล - เป็นผู้ช่วย</div>
+                        <div class="mood-meter" data-question="summary">
+                            <button type="button" class="mood-btn" data-value="1" title="ไม่ต้องการ">😞</button>
+                            <button type="button" class="mood-btn" data-value="2" title="ไม่ต้องการมาก">😕</button>
+                            <button type="button" class="mood-btn" data-value="3" title="ปานกลาง">😐</button>
+                            <button type="button" class="mood-btn" data-value="4" title="ต้องการ">🙂</button>
+                            <button type="button" class="mood-btn" data-value="5" title="ต้องการมาก">😄</button>
+                        </div>
+                    </div>
+
+                    <div class="error-msg" id="error-mood">กรุณาให้คะแนนทุกข้อ</div>
+                </div>
+
+                <!-- Section 6 - Features -->
+                <div class="subsection">
+                    <div class="section-number">6. ชอบหรือเคยใช้ Feature ไหนของ Claude? <span class="required">*</span></div>
+                    <div class="checkbox-list">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="feature" value="chat" id="f1">
+                            <label for="f1">Chat</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="feature" value="cowork" id="f2">
+                            <label for="f2">Co-work</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="feature" value="code" id="f3">
+                            <label for="f3">Code</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="feature" value="project" id="f4">
+                            <label for="f4">Project</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="feature" value="others" id="f5">
+                            <label for="f5">Others (ระบุ)</label>
+                        </div>
+                    </div>
+                    <input type="text" id="featureText" class="text-input" placeholder="ระบุ Feature อื่นๆ" style="display: none;">
+                    <div class="error-msg" id="error-feature">กรุณาเลือก Feature</div>
+                </div>
+
+                <!-- Section 7 - Class Type -->
+                <div class="subsection">
+                    <div class="section-number">7. รูปแบบการเรียน <span class="required">*</span></div>
+                    <div class="radio-list">
+                        <div class="radio-item">
+                            <input type="radio" name="classType" value="content" id="t1" required>
+                            <label for="t1">เน้นไปที่เนื้อหา</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="classType" value="workshop" id="t2">
+                            <label for="t2">ได้ลองปฏิบัติจริง - workshop</label>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="error-classType">กรุณาเลือก</div>
+                </div>
+
+                <!-- Section 8 - AI Skill -->
+                <div class="subsection">
+                    <div class="section-number">8. AI Skill ของตัวเอง <span class="required">*</span></div>
+                    
+                    <div style="margin-bottom: 0.75rem;">
+                        <div class="subsection-title">Linear scale 1-5</div>
+                        <div class="scale-container">
+                            <span class="scale-label">ต่ำ</span>
+                            <button type="button" class="scale-btn" data-rating="1">1</button>
+                            <button type="button" class="scale-btn" data-rating="2">2</button>
+                            <button type="button" class="scale-btn" data-rating="3">3</button>
+                            <button type="button" class="scale-btn" data-rating="4">4</button>
+                            <button type="button" class="scale-btn" data-rating="5">5</button>
+                            <span class="scale-label">สูง</span>
+                        </div>
+                        <div class="error-msg" id="error-skill">กรุณาให้คะแนน</div>
+                    </div>
+
+                    <div style="margin-bottom: 0;">
+                        <div class="subsection-title">เหตุผล :</div>
+                        <textarea name="reason" id="reason" placeholder="ระบุเหตุผล"></textarea>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="reset" class="btn">ล้างข้อมูล</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ====== CONFIG ======
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkvte9MpYxx4dg6buwSZObNLw-E5Xi4xmZoNVgOkTuoqctM6QwyvcbJ7sIKqcR6GEtwQ/exec';
+
+        // ====== EVENT LISTENERS ======
+        const form = document.getElementById('preScreenForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Mood buttons
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const group = btn.closest('.mood-meter');
+                group.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
+        // Scale buttons
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
+        // Toggle "Others" input
+        document.getElementById('a4').addEventListener('change', (e) => {
+            document.getElementById('otherAIText').style.display = e.target.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('f5').addEventListener('change', (e) => {
+            document.getElementById('featureText').style.display = e.target.checked ? 'block' : 'none';
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            const data = collectData();
+            submitBtn.disabled = true;
+            showStatus('กำลังบันทึกข้อมูล...', 'loading');
+
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                showStatus('✓ ส่งข้อมูลสำเร็จแล้ว!', 'success');
+                form.style.opacity = '0.6';
+                form.style.pointerEvents = 'none';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                showStatus('⚠️ เกิดข้อผิดพลาด', 'error');
+                submitBtn.disabled = false;
+            });
+        });
+
+        // ====== VALIDATION ======
+        function validateForm() {
+            document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+            let isValid = true;
+
+            if (!document.querySelector('input[name="batch"]:checked')) {
+                document.getElementById('error-batch').classList.add('show');
+                isValid = false;
+            }
+
+            if (!document.querySelector('input[name="dept"]:checked')) {
+                document.getElementById('error-dept').classList.add('show');
+                isValid = false;
+            }
+
+            if (!document.querySelector('input[name="claudeExp"]:checked')) {
+                document.getElementById('error-claude').classList.add('show');
+                isValid = false;
+            }
+
+            const moodGroups = ['dashboard', 'app', 'project', 'summary'];
+            let allMoodAnswered = moodGroups.every(g => 
+                document.querySelector(`.mood-meter[data-question="${g}"] .mood-btn.selected`)
+            );
+            if (!allMoodAnswered) {
+                document.getElementById('error-mood').classList.add('show');
+                isValid = false;
+            }
+
+            if (!document.querySelector('input[name="feature"]:checked')) {
+                document.getElementById('error-feature').classList.add('show');
+                isValid = false;
+            }
+
+            if (!document.querySelector('input[name="classType"]:checked')) {
+                document.getElementById('error-classType').classList.add('show');
+                isValid = false;
+            }
+
+            if (!document.querySelector('.scale-btn.selected')) {
+                document.getElementById('error-skill').classList.add('show');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // ====== COLLECT DATA ======
+        function collectData() {
+            const otherAIValues = Array.from(document.querySelectorAll('input[name="otherAI"]:checked')).map(el => {
+                return el.value === 'others' ? document.getElementById('otherAIText').value : el.value;
+            });
+
+            const featureValues = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(el => {
+                return el.value === 'others' ? document.getElementById('featureText').value : el.value;
+            });
+
+            const deptValues = Array.from(document.querySelectorAll('input[name="dept"]:checked')).map(el => el.value);
+
+            return {
+                batch: document.querySelector('input[name="batch"]:checked').value,
+                dept: deptValues.join(', '),
+                claudeExp: document.querySelector('input[name="claudeExp"]:checked').value,
+                otherAI: otherAIValues.join(', '),
+                dashboard: document.querySelector('.mood-meter[data-question="dashboard"] .mood-btn.selected')?.dataset.value,
+                app: document.querySelector('.mood-meter[data-question="app"] .mood-btn.selected')?.dataset.value,
+                project: document.querySelector('.mood-meter[data-question="project"] .mood-btn.selected')?.dataset.value,
+                summary: document.querySelector('.mood-meter[data-question="summary"] .mood-btn.selected')?.dataset.value,
+                feature: featureValues.join(', '),
+                classType: document.querySelector('input[name="classType"]:checked').value,
+                aiSkill: document.querySelector('.scale-btn.selected')?.dataset.rating,
+                reason: document.getElementById('reason').value,
+                submittedAt: new Date().toISOString()
+            };
+        }
+
+        // ====== STATUS MESSAGE ======
+        function showStatus(message, type = 'loading') {
+            const statusMessage = document.getElementById('statusMessage');
+            if (type === 'loading') {
+                statusMessage.innerHTML = `<span class="spinner"></span>${message}`;
+            } else {
+                statusMessage.textContent = message;
+            }
+            statusMessage.className = `status-message show ${type}`;
+        }
+    </script>
+</body>
+</html>
